@@ -233,19 +233,20 @@ namespace ManagedNativeWifi
 		/// <summary>
 		/// Enumerates Association Attributess of connected wireless LANs. 
 		/// </summary>
+		/// <param name="interfaceGuid">Interface GUID</param>
 		/// <returns>Association Attributes</returns>
-		public static IEnumerable<AssociationAttributes> EnumerateAssociationAttributes()
+		public static IEnumerable<AssociationAttributes> EnumerateAssociationAttributes(Guid? interfaceGuid = null)
 		{
-			return EnumerateAssociationAttributes(null);
+			return EnumerateAssociationAttributes(null, interfaceGuid);
 		}
 
-		internal static IEnumerable<AssociationAttributes> EnumerateAssociationAttributes(Base.WlanClient client)
+		internal static IEnumerable<AssociationAttributes> EnumerateAssociationAttributes(Base.WlanClient client, Guid? interfaceGuid)
 		{
 			using var container = new DisposableContainer<Base.WlanClient>(client);
 
 			foreach (var interfaceInfo in Base.GetInterfaceInfoList(container.Content.Handle))
 			{
-				var connection = Base.GetConnectionAttributes(container.Content.Handle, interfaceInfo.InterfaceGuid);
+				var connection = Base.GetConnectionAttributes(container.Content.Handle, interfaceGuid ?? interfaceInfo.InterfaceGuid);
 				var attributes = connection.wlanAssociationAttributes;
 
 				var ssid = attributes.dot11Ssid.ToString();
