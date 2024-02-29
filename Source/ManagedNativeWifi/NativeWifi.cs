@@ -375,15 +375,25 @@ namespace ManagedNativeWifi
 
 			foreach (var interfaceInfo in EnumerateInterfaces(container.Content))
 			{
-				foreach (var networkBssEntry in Base.GetNetworkBssEntryList(container.Content.Handle, interfaceInfo.Id))
+				foreach (var networkBssEntryWrapper in Base.GetNetworkBssEntryWrapperList(container.Content.Handle, interfaceInfo.Id))
 				{
-					if (TryConvertBssNetwork(interfaceInfo, networkBssEntry, out BssNetworkPack bssNetwork))
+					if (TryConvertBssNetwork(interfaceInfo, networkBssEntryWrapper, out BssNetworkPack bssNetwork))
 						yield return bssNetwork;
 				}
 			}
 		}
 
+		private static bool TryConvertBssNetwork(InterfaceInfo interfaceInfo, BssEntryWrapper bssEntryWrapper, out BssNetworkPack bssNetwork)
+		{
+			return TryConvertBssNetwork(interfaceInfo, bssEntryWrapper.BssEntry, bssEntryWrapper.IEs, out bssNetwork);
+		}
+
 		private static bool TryConvertBssNetwork(InterfaceInfo interfaceInfo, WLAN_BSS_ENTRY bssEntry, out BssNetworkPack bssNetwork)
+		{
+			return TryConvertBssNetwork(interfaceInfo, bssEntry, null, out bssNetwork);
+		}
+
+		private static bool TryConvertBssNetwork(InterfaceInfo interfaceInfo, WLAN_BSS_ENTRY bssEntry, byte[] ies, out BssNetworkPack bssNetwork)
 		{
 			bssNetwork = null;
 
@@ -403,7 +413,8 @@ namespace ManagedNativeWifi
 				linkQuality: (int)bssEntry.uLinkQuality,
 				frequency: (int)bssEntry.ulChCenterFrequency,
 				band: band,
-				channel: channel);
+				channel: channel,
+				ies: ies);
 			return true;
 		}
 

@@ -62,6 +62,11 @@ namespace ManagedNativeWifi
 		public int Channel { get; }
 
 		/// <summary>
+		/// IEs
+		/// </summary>
+		public byte[] IEs { get; }
+
+		/// <summary>
 		/// Constructor
 		/// </summary>
 		public BssNetworkPack(
@@ -74,7 +79,8 @@ namespace ManagedNativeWifi
 			int linkQuality,
 			int frequency,
 			float band,
-			int channel)
+			int channel,
+			byte[] ies)
 		{
 			this.Interface = interfaceInfo;
 			this.Ssid = ssid;
@@ -86,6 +92,7 @@ namespace ManagedNativeWifi
 			this.Frequency = frequency;
 			this.Band = band;
 			this.Channel = channel;
+			this.IEs = ies;
 		}
 	}
 }
