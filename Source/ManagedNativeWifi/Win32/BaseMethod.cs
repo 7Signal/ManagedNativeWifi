@@ -210,6 +210,38 @@ namespace ManagedNativeWifi.Win32
 			}
 		}
 
+		public static IEnumerable<BssEntryWrapper> GetNetworkBssEntryWrapperList(SafeClientHandle clientHandle, Guid interfaceId)
+		{
+			var wlanBssList = IntPtr.Zero;
+			try
+			{
+				var result = WlanGetNetworkBssList(
+					clientHandle,
+					interfaceId,
+					IntPtr.Zero,
+					DOT11_BSS_TYPE.dot11_BSS_type_any,
+					false,
+					IntPtr.Zero,
+					out wlanBssList);
+
+				// ERROR_INVALID_HANDLE: The client handle was not found in the handle table.
+				// ERROR_INVALID_PARAMETER: A parameter is incorrect. The interface is removed.
+				// ERROR_NOT_ENOUGH_MEMORY: Not enough memory is available to process this request.
+				// ERROR_NDIS_DOT11_POWER_STATE_INVALID: The interface is turned off.
+				// ERROR_NOT_FOUND: The inteface GUID could not be found.
+				// ERROR_NOT_SUPPORTED: The WLAN AutoConfig service is disabled.
+				// ERROR_SERVICE_NOT_ACTIVE: The WLAN AutoConfig service has not been started.
+				return CheckResult(nameof(WlanGetNetworkBssList), result, false)
+					? new BssEntryWrapperList(wlanBssList).BssEntryWrappers
+					: new BssEntryWrapper[0];
+			}
+			finally
+			{
+				if (wlanBssList != IntPtr.Zero)
+					WlanFreeMemory(wlanBssList);
+			}
+		}
+
 		public static IEnumerable<WLAN_BSS_ENTRY> GetNetworkBssEntryList(SafeClientHandle clientHandle, Guid interfaceId)
 		{
 			var wlanBssList = IntPtr.Zero;
