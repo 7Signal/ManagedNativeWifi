@@ -154,6 +154,31 @@ namespace ManagedNativeWifi.Test
 			TryDetectChannelInvalidTestBase(5_651_000);
 		}
 
+		/// <summary>
+		/// Detects channels of 6GHz.
+		/// </summary>
+		[TestMethod]
+		public void TryDetectChannel60000Test()
+		{
+			// Valid cases
+			TryDetectChannelValidTestBase(5_945_000, 6F, 1);
+			TryDetectChannelValidTestBase(5_955_000, 6F, 1);
+			TryDetectChannelValidTestBase(5_975_000, 6F, 5);
+			TryDetectChannelValidTestBase(6_055_000, 6F, 21);
+			TryDetectChannelValidTestBase(6_235_000, 6F, 57);
+			TryDetectChannelValidTestBase(6_415_000, 6F, 93);
+			TryDetectChannelValidTestBase(6_595_000, 6F, 129);
+			TryDetectChannelValidTestBase(6_715_000, 6F, 153);
+			TryDetectChannelValidTestBase(6_875_000, 6F, 185);
+			TryDetectChannelValidTestBase(6_955_000, 6F, 201);
+			TryDetectChannelValidTestBase(7_125_000, 6F, 235);
+
+			// Invalid cases
+			TryDetectChannelInvalidTestBase(5_935_000);
+			TryDetectChannelInvalidTestBase(7_130_000);
+			TryDetectChannelInvalidTestBase(6_271_000);
+		}
+
 		private void TryDetectChannelValidTestBase(uint frequency, float expectedBand, int expectedChannel)
 		{
 			Assert.IsTrue(NativeWifi.TryDetectBandChannel(frequency, out var band, out var channel));

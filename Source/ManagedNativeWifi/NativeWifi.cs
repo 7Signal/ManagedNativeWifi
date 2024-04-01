@@ -1090,6 +1090,16 @@ namespace ManagedNativeWifi
 				if (factor - Math.Floor(factor) == 0)
 					channel = (int)factor + 34;
 			}
+			else if (frequency is (>= 5_945_000 and <= 7_125_000))
+			{
+				// 6GHz
+				band = 6.0F;
+
+				var gap = frequency / 1_000M - 5_945M; // MHz
+				var factor = gap / 5M;
+				if (factor - Math.Floor(factor) == 0)
+					channel = Math.Max(1, (int)factor - 1);
+			}
 
 			return (0 < channel);
 		}
