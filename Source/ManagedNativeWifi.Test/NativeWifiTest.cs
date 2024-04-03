@@ -96,6 +96,7 @@ namespace ManagedNativeWifi.Test
 			TryDetectChannelValidTestBase(2_417_000, 2.4F, 2);
 			TryDetectChannelValidTestBase(2_432_000, 2.4F, 5);
 			TryDetectChannelValidTestBase(2_437_000, 2.4F, 6);
+			TryDetectChannelValidTestBase(2_453_000, 2.4F, 9);
 			TryDetectChannelValidTestBase(2_467_000, 2.4F, 12);
 			TryDetectChannelValidTestBase(2_472_000, 2.4F, 13);
 			TryDetectChannelValidTestBase(2_484_000, 2.4F, 14);
@@ -103,7 +104,6 @@ namespace ManagedNativeWifi.Test
 			// Invalid cases
 			TryDetectChannelInvalidTestBase(2_411_000);
 			TryDetectChannelInvalidTestBase(2_485_000);
-			TryDetectChannelInvalidTestBase(2_453_000);
 		}
 
 		/// <summary>
@@ -118,6 +118,7 @@ namespace ManagedNativeWifi.Test
 			TryDetectChannelValidTestBase(3_662_500, 3.6F, 132);
 			TryDetectChannelValidTestBase(3_665_000, 3.6F, 133);
 			TryDetectChannelValidTestBase(3_667_500, 3.6F, 133);
+			TryDetectChannelValidTestBase(3_673_000, 3.6F, 134);
 			TryDetectChannelValidTestBase(3_675_000, 3.6F, 135);
 			TryDetectChannelValidTestBase(3_677_500, 3.6F, 135);
 			TryDetectChannelValidTestBase(3_690_000, 3.6F, 138);
@@ -126,7 +127,6 @@ namespace ManagedNativeWifi.Test
 			// Invalid cases
 			TryDetectChannelInvalidTestBase(3_657_000);
 			TryDetectChannelInvalidTestBase(3_695_000);
-			TryDetectChannelInvalidTestBase(3_673_000);
 		}
 
 		/// <summary>
@@ -141,6 +141,7 @@ namespace ManagedNativeWifi.Test
 			TryDetectChannelValidTestBase(5_200_000, 5F, 40);
 			TryDetectChannelValidTestBase(5_260_000, 5F, 52);
 			TryDetectChannelValidTestBase(5_280_000, 5F, 56);
+			TryDetectChannelValidTestBase(5_651_000, 5F, 130);
 			TryDetectChannelValidTestBase(5_700_000, 5F, 140);
 			TryDetectChannelValidTestBase(5_720_000, 5F, 144);
 			TryDetectChannelValidTestBase(5_745_000, 5F, 149);
@@ -151,7 +152,6 @@ namespace ManagedNativeWifi.Test
 			// Invalid cases
 			TryDetectChannelInvalidTestBase(5_160_000);
 			TryDetectChannelInvalidTestBase(5_850_000);
-			TryDetectChannelInvalidTestBase(5_651_000);
 		}
 
 		/// <summary>
@@ -166,6 +166,7 @@ namespace ManagedNativeWifi.Test
 			TryDetectChannelValidTestBase(5_975_000, 6F, 5);
 			TryDetectChannelValidTestBase(6_055_000, 6F, 21);
 			TryDetectChannelValidTestBase(6_235_000, 6F, 57);
+			TryDetectChannelValidTestBase(6_271_000, 6F, 64);
 			TryDetectChannelValidTestBase(6_415_000, 6F, 93);
 			TryDetectChannelValidTestBase(6_595_000, 6F, 129);
 			TryDetectChannelValidTestBase(6_715_000, 6F, 153);
@@ -176,7 +177,6 @@ namespace ManagedNativeWifi.Test
 			// Invalid cases
 			TryDetectChannelInvalidTestBase(5_935_000);
 			TryDetectChannelInvalidTestBase(7_130_000);
-			TryDetectChannelInvalidTestBase(6_271_000);
 		}
 
 		private void TryDetectChannelValidTestBase(uint frequency, float expectedBand, int expectedChannel)
