@@ -1045,6 +1045,7 @@ namespace ManagedNativeWifi
 		/// As for 5GHz, this method may produce a channel number which is not actually in use.
 		/// Some channel numbers of 5GHz overlap those of 3.6GHz. In such cases, refer frequency band
 		/// to distinguish them.
+		/// Integer division results in best approximations for frequencies not aligned to channel specifications.
 		/// </remarks>
 		internal static bool TryDetectBandChannel(uint frequency, out float band, out int channel)
 		{
@@ -1058,10 +1059,9 @@ namespace ManagedNativeWifi
 
 				if (frequency < 2_484_000)
 				{
-					var gap = frequency / 1_000M - 2_412M; // MHz
-					var factor = gap / 5M;
-					if (factor - Math.Floor(factor) == 0)
-						channel = (int)factor + 1;
+					uint gap = frequency / 1_000 - 2_412; // MHz;
+					uint factor = gap / 5;
+					channel = (int)factor + 1;
 				}
 				else
 				{
@@ -1073,22 +1073,27 @@ namespace ManagedNativeWifi
 				// 3.6GHz
 				band = 3.6F;
 
-				var gap = frequency / 1_000M - 3_655M; // MHz
-				if (gap % 2.5M == 0)
-				{
-					var factor = gap / 5M;
-					channel = (int)Math.Floor(factor) + 131;
-				}
+				uint gap = frequency / 1_000 - 3_655; // MHz
+				uint factor = gap / 5;
+				channel = (int)factor + 131;
 			}
 			else if (frequency is (>= 5_170_000 and <= 5_825_000))
 			{
 				// 5GHz
 				band = 5.0F;
 
-				var gap = frequency / 1_000M - 5_170M; // MHz
-				var factor = gap / 5M;
-				if (factor - Math.Floor(factor) == 0)
-					channel = (int)factor + 34;
+				uint gap = frequency / 1_000 - 5_170; // MHz
+				uint factor = gap / 5;
+				channel = (int)factor + 34;
+			}
+			else if (frequency is (>= 5_945_000 and <= 7_125_000))
+			{
+				// 6GHz
+				band = 6.0F;
+
+				uint gap = frequency / 1_000 - 5_945; // MHz
+				uint factor = gap / 5;
+				channel = Math.Max(1, (int)factor - 1);
 			}
 
 			return (0 < channel);
