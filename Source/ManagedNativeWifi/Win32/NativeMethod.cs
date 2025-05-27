@@ -424,6 +424,39 @@ namespace ManagedNativeWifi.Win32
 			}
 		}
 
+		public struct WLAN_REALTIME_CONNECTION_QUALITY
+		{
+			public DOT11_PHY_TYPE dot11PhyType;
+			public uint ulLinkQuality;
+			public uint ulRxRate;
+			public uint ulTxRate;
+			public bool bIsMLOConnection;
+			public uint ulNumLinks;
+			public WLAN_REALTIME_CONNECTION_QUALITY_LINK_INFO[] LinksInfo;
+
+			public WLAN_REALTIME_CONNECTION_QUALITY(IntPtr ppConnectionQuality)
+			{
+				var uintSize = Marshal.SizeOf<uint>(); // 4
+
+				dot11PhyType = (DOT11_PHY_TYPE)Marshal.ReadInt32(ppConnectionQuality);
+				ulLinkQuality = (uint)Marshal.ReadInt32(ppConnectionQuality, uintSize);
+				ulRxRate = (uint)Marshal.ReadInt32(ppConnectionQuality, uintSize * 2);
+				ulTxRate = (uint)Marshal.ReadInt32(ppConnectionQuality, uintSize * 3);
+				bIsMLOConnection = Marshal.ReadInt32(ppConnectionQuality, uintSize * 4) != 0;
+				ulNumLinks = (uint)Marshal.ReadInt32(ppConnectionQuality, uintSize * 5);
+				LinksInfo = new WLAN_REALTIME_CONNECTION_QUALITY_LINK_INFO[ulNumLinks];
+
+				for (int i = 0; i < ulNumLinks; i++)
+				{
+					var profileInfo = new IntPtr(ppConnectionQuality.ToInt64()
+						+ (uintSize * 6) /* Offset for non-array fields */
+						+ (Marshal.SizeOf<WLAN_REALTIME_CONNECTION_QUALITY_LINK_INFO>() * i) /* Offset for preceding items */);
+
+					LinksInfo[i] = Marshal.PtrToStructure<WLAN_REALTIME_CONNECTION_QUALITY_LINK_INFO>(profileInfo);
+				}
+			}
+		}
+
 		#endregion
 
 		#region Struct (Secondary)
@@ -587,6 +620,16 @@ namespace ManagedNativeWifi.Win32
 			public string strProfileXml;
 		}
 
+		[StructLayout(LayoutKind.Sequential)]
+		public struct WLAN_REALTIME_CONNECTION_QUALITY_LINK_INFO
+		{
+			public byte ucLinkID;
+			public uint ulChannelCenterFrequencyMhz;
+			public uint ulBandwidth;
+			public int lRssi;
+			public WLAN_RATE_SET wlanRateSet;
+		}
+
 		#endregion
 
 		#region Enum
@@ -719,6 +762,10 @@ namespace ManagedNativeWifi.Win32
 			wlan_intf_opcode_certified_safe_mode,
 			wlan_intf_opcode_hosted_network_capable,
 			wlan_intf_opcode_management_frame_protection_capable,
+			wlan_intf_opcode_secondary_sta_interfaces,
+			wlan_intf_opcode_secondary_sta_synchronized_connections,
+			wlan_intf_opcode_realtime_connection_quality,
+			wlan_intf_opcode_qos_info,
 			wlan_intf_opcode_autoconf_end = 0x0fffffff,
 			wlan_intf_opcode_msm_start = 0x10000100,
 			wlan_intf_opcode_statistics,

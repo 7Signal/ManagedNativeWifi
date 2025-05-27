@@ -998,6 +998,31 @@ namespace ManagedNativeWifi
 
 		#endregion
 
+		#region Realtime Connection Quality
+
+		/// <summary>
+		/// Gets realtime connection quality information of a specified wireless interface.
+		/// </summary>
+		/// <param name="interfaceId">Interface ID</param>
+		/// <returns>Realtime connection quality information.</returns>
+		public static RealtimeConnectionQuality GetInterfaceRealtimeConnectionQuality(Guid interfaceId)
+		{
+			return GetInterfaceRealtimeConnectionQuality(null, interfaceId);
+		}
+
+		internal static RealtimeConnectionQuality GetInterfaceRealtimeConnectionQuality(Base.WlanClient client, Guid interfaceId)
+		{
+			if (interfaceId == Guid.Empty)
+				throw new ArgumentException("The specified interface ID is invalid.", nameof(interfaceId));
+
+			using var container = new DisposableContainer<Base.WlanClient>(client);
+
+			var quality = Base.GetRealtimeConnectionQuality(container.Content.Handle, interfaceId);
+			return new RealtimeConnectionQuality(quality);
+		}
+
+		#endregion
+
 		#region Auto config
 
 		/// <summary>

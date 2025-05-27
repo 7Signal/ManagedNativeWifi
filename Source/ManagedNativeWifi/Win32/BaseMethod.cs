@@ -623,6 +623,31 @@ namespace ManagedNativeWifi.Win32
 			}
 		}
 
+		public static WLAN_REALTIME_CONNECTION_QUALITY GetRealtimeConnectionQuality(SafeClientHandle clientHandle, Guid interfaceId)
+		{
+			var queryData = IntPtr.Zero;
+			try
+			{
+				var result = WlanQueryInterface(
+					clientHandle,
+					interfaceId,
+					WLAN_INTF_OPCODE.wlan_intf_opcode_realtime_connection_quality,
+					IntPtr.Zero,
+					out _,
+					out queryData,
+					IntPtr.Zero);
+
+				return CheckResult(nameof(WlanQueryInterface), result, false)
+					? new WLAN_REALTIME_CONNECTION_QUALITY(queryData)
+					: default;
+			}
+			finally
+			{
+				if (queryData != IntPtr.Zero)
+					WlanFreeMemory(queryData);
+			}
+		}
+
 		public static bool? IsAutoConfig(SafeClientHandle clientHandle, Guid interfaceId)
 		{
 			var value = GetInterfaceInt(clientHandle, interfaceId, WLAN_INTF_OPCODE.wlan_intf_opcode_autoconf_enabled);
