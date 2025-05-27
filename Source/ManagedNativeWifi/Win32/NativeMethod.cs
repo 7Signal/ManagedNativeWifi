@@ -448,11 +448,11 @@ namespace ManagedNativeWifi.Win32
 
 				for (int i = 0; i < ulNumLinks; i++)
 				{
-					var profileInfo = new IntPtr(ppConnectionQuality.ToInt64()
+					var linkInfo = new IntPtr(ppConnectionQuality.ToInt64()
 						+ (uintSize * 6) /* Offset for non-array fields */
 						+ (Marshal.SizeOf<WLAN_REALTIME_CONNECTION_QUALITY_LINK_INFO>() * i) /* Offset for preceding items */);
 
-					LinksInfo[i] = Marshal.PtrToStructure<WLAN_REALTIME_CONNECTION_QUALITY_LINK_INFO>(profileInfo);
+					LinksInfo[i] = Marshal.PtrToStructure<WLAN_REALTIME_CONNECTION_QUALITY_LINK_INFO>(linkInfo);
 				}
 			}
 		}
